@@ -27,8 +27,8 @@ const fadeIn = keyframes`
 `;
 
 const subtleGlow = keyframes`
-  0%, 100% { box-shadow: 0 0 0 rgba(123, 92, 255, 0); }
-  50% { box-shadow: 0 0 32px rgba(123, 92, 255, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 rgba(232, 93, 42, 0); }
+  50% { box-shadow: 0 0 32px rgba(232, 93, 42, 0.3); }
 `;
 
 // Styled Components
@@ -44,8 +44,8 @@ const PageContainer = styled.div`
   overflow: hidden;
   
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(22, 24, 28, 0.6) 0%, transparent 60%),
-    #0B0B0D;
+    radial-gradient(ellipse at 50% 0%, rgba(232, 93, 42, 0.06) 0%, transparent 60%),
+    #0D0D0F;
   
   &::before {
     content: '';
@@ -134,10 +134,18 @@ const FeatureItem = styled.div<{ $delay: number }>`
 `;
 
 const FeatureIcon = styled.span`
-  font-size: 1.25rem;
-  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 2rem;
-  text-align: center;
+  flex-shrink: 0;
+`;
+
+const FeatureIconSvg = styled.svg`
+  width: 20px;
+  height: 20px;
+  color: ${({ theme }) => theme.accent};
+  opacity: 0.8;
 `;
 
 const FeatureInfo = styled.div`
@@ -291,60 +299,61 @@ const HomePage: React.FC = () => {
           </HeroSection>
 
           <FeatureSection $delay={delays.features}>
-            {communityConfig.features.members && (
-              <FeatureItem $delay={delays.feature1}>
-                <FeatureIcon>👥</FeatureIcon>
-                <FeatureInfo>
-                  <FeatureTitle>Member Directory</FeatureTitle>
-                  <FeatureLabel>Connect with community members</FeatureLabel>
-                </FeatureInfo>
-              </FeatureItem>
-            )}
+            <FeatureItem $delay={delays.feature1}>
+              <FeatureIcon>
+                <FeatureIconSvg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </FeatureIconSvg>
+              </FeatureIcon>
+              <FeatureInfo>
+                <FeatureTitle>Spaces Directory</FeatureTitle>
+                <FeatureLabel>Find makerspaces, studios, and tools near you</FeatureLabel>
+              </FeatureInfo>
+            </FeatureItem>
 
-            {communityConfig.features.events && (
-              <FeatureItem $delay={delays.feature2}>
-                <FeatureIcon>📅</FeatureIcon>
-                <FeatureInfo>
-                  <FeatureTitle>Events</FeatureTitle>
-                  <FeatureLabel>Discover and RSVP to events</FeatureLabel>
-                </FeatureInfo>
-              </FeatureItem>
-            )}
+            <FeatureItem $delay={delays.feature2}>
+              <FeatureIcon>
+                <FeatureIconSvg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </FeatureIconSvg>
+              </FeatureIcon>
+              <FeatureInfo>
+                <FeatureTitle>Events & Workshops</FeatureTitle>
+                <FeatureLabel>Learn, build, and connect at local events</FeatureLabel>
+              </FeatureInfo>
+            </FeatureItem>
 
-            {communityConfig.features.socialFeed && (
-              <FeatureItem $delay={delays.feature3}>
-                <FeatureIcon>📝</FeatureIcon>
-                <FeatureInfo>
-                  <FeatureTitle>Social Feed</FeatureTitle>
-                  <FeatureLabel>Share updates and connect</FeatureLabel>
-                </FeatureInfo>
-              </FeatureItem>
-            )}
-
-            {communityConfig.features.chat && (
-              <FeatureItem $delay={delays.feature3 + 150}>
-                <FeatureIcon>💬</FeatureIcon>
-                <FeatureInfo>
-                  <FeatureTitle>Community Chat</FeatureTitle>
-                  <FeatureLabel>Real-time conversations</FeatureLabel>
-                </FeatureInfo>
-              </FeatureItem>
-            )}
+            <FeatureItem $delay={delays.feature3}>
+              <FeatureIcon>
+                <FeatureIconSvg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="16" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
+                </FeatureIconSvg>
+              </FeatureIcon>
+              <FeatureInfo>
+                <FeatureTitle>Opportunities Board</FeatureTitle>
+                <FeatureLabel>Find gigs, grants, collaborators, and tool access</FeatureLabel>
+              </FeatureInfo>
+            </FeatureItem>
           </FeatureSection>
 
           <CTASection $delay={delays.cta}>
             <EnterButton href="/app" $active={ctaActive}>
-              Join Community
+              Enter the Hub
             </EnterButton>
-            <CTAMicrocopy>Sign in to connect with the community</CTAMicrocopy>
+            <CTAMicrocopy>Sign in to explore spaces and opportunities</CTAMicrocopy>
           </CTASection>
 
           <FooterRow $delay={delays.footer}>
-            <FooterText>Members</FooterText>
+            <FooterText>Spaces</FooterText>
             <Divider />
             <FooterText>Events</FooterText>
             <Divider />
-            <FooterText>Feed</FooterText>
+            <FooterText>Opportunities</FooterText>
           </FooterRow>
         </Content>
       </PageContainer>
