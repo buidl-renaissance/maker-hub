@@ -176,7 +176,89 @@ export const broadcasts = sqliteTable('broadcasts', {
   index('idx_broadcasts_tenant_status').on(table.tenantId, table.status),
 ]);
 
+// Opportunity types
+export const OPPORTUNITY_TYPES = ['collaborator', 'paid_gig', 'grant', 'tool_access', 'materials_swap', 'open_studio'] as const;
+export type OpportunityType = typeof OPPORTUNITY_TYPES[number];
+
+// Opportunity status
+export const OPPORTUNITY_STATUSES = ['active', 'closed', 'expired'] as const;
+export type OpportunityStatus = typeof OPPORTUNITY_STATUSES[number];
+
+// Space tool categories
+export const TOOL_CATEGORIES = ['wood', 'metal', '3d_print', 'laser', 'electronics', 'sewing', 'ceramics', 'textiles', 'cnc', 'other'] as const;
+export type ToolCategory = typeof TOOL_CATEGORIES[number];
+
+// Spaces table - makerspaces and hubs
+export const spaces = sqliteTable('spaces', {
+  id: text('id').primaryKey(),
+  tenantId: text('tenant_id').notNull().default(DEFAULT_TENANT_ID),
+  name: text('name').notNull(),
+  slug: text('slug').notNull(),
+  description: text('description'),
+  shortDescription: text('short_description'),
+  neighborhood: text('neighborhood'),
+  address: text('address'),
+  imageUrl: text('image_url'),
+  websiteUrl: text('website_url'),
+  contactEmail: text('contact_email'),
+  contactPhone: text('contact_phone'),
+  tools: text('tools'), // JSON array of ToolCategory[]
+  isBeginnerFriendly: integer('is_beginner_friendly', { mode: 'boolean' }).default(false).notNull(),
+  requiresMembership: integer('requires_membership', { mode: 'boolean' }).default(false).notNull(),
+  organizerId: text('organizer_id'), // User who manages this space
+  isVerified: integer('is_verified', { mode: 'boolean' }).default(false).notNull(),
+  isFeatured: integer('is_featured', { mode: 'boolean' }).default(false).notNull(),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
+  updatedAt: integer('updatedAt', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
+}, (table) => [
+  index('idx_spaces_tenant').on(table.tenantId),
+  uniqueIndex('idx_spaces_slug').on(table.tenantId, table.slug),
+  index('idx_spaces_neighborhood').on(table.neighborhood),
+  index('idx_spaces_featured').on(table.isFeatured),
+]);
+
+// Opportunities table - collaboration, gigs, grants, etc.
+export const opportunities = sqliteTable('opportunities', {
+  id: text('id').primaryKey(),
+  tenantId: text('tenant_id').notNull().default(DEFAULT_TENANT_ID),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  type: text('type').$type<OpportunityType>().notNull(),
+  status: text('status').$type<OpportunityStatus>().default('active').notNull(),
+  spaceId: text('space_id'), // Optional association with a space
+  postedById: text('posted_by_id').notNull(),
+  contactInfo: text('contact_info'),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
+  updatedAt: integer('updatedAt', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
+}, (table) => [
+  index('idx_opportunities_tenant').on(table.tenantId),
+  index('idx_opportunities_type').on(table.type),
+  index('idx_opportunities_status').on(table.status),
+  index('idx_opportunities_space').on(table.spaceId),
+  index('idx_opportunities_posted_by').on(table.postedById),
+]);
+
+// Opportunity Comments table
+export const opportunityComments = sqliteTable('opportunity_comments', {
+  id: text('id').primaryKey(),
+  tenantId: text('tenant_id').notNull().default(DEFAULT_TENANT_ID),
+  opportunityId: text('opportunity_id').notNull(),
+  userId: text('user_id').notNull(),
+  content: text('content').notNull(),
+  createdAt: integer('createdAt', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`).notNull(),
+}, (table) => [
+  index('idx_opp_comments_tenant').on(table.tenantId),
+  index('idx_opp_comments_opp').on(table.opportunityId),
+]);
+
 // Type exports
+export type Space = typeof spaces.$inferSelect;
+export type NewSpace = typeof spaces.$inferInsert;
+export type Opportunity = typeof opportunities.$inferSelect;
+export type NewOpportunity = typeof opportunities.$inferInsert;
+export type OpportunityComment = typeof opportunityComments.$inferSelect;
+export type NewOpportunityComment = typeof opportunityComments.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Member = typeof members.$inferSelect;
