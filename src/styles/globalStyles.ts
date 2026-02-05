@@ -5,14 +5,14 @@ export const GlobalStyle = createGlobalStyle`
 
   /* CSS Variables for tenant theming - set by TenantProvider */
   :root {
-    --color-primary: #7B5CFF;
-    --color-primary-hover: #8F73FF;
-    --color-accent: #7B5CFF;
-    --color-background: #0a0a0a;
-    --color-surface: #1a1a1a;
-    --color-text: #ffffff;
-    --color-text-muted: #888888;
-    --color-border: #333333;
+    --color-primary: #E85D2A;
+    --color-primary-hover: #D14E1F;
+    --color-accent: #E85D2A;
+    --color-background: #0D0D0F;
+    --color-surface: #18191D;
+    --color-text: #F0F0F0;
+    --color-text-muted: #8A8A8F;
+    --color-border: #2C2D33;
     --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }

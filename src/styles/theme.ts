@@ -45,35 +45,35 @@ declare module 'styled-components' {
   }
 }
 
-// Into the Void - Dark Theme
-// Underground tournament energy, ritualistic, competitive
+// Detroit Maker Hub - Dark Theme
+// Industrial, community-first, civic infrastructure
 export const darkTheme: DefaultTheme = {
   // Core backgrounds
-  background: '#0B0B0D',           // Void Black
-  backgroundAlt: '#16181C',        // Obsidian Charcoal
-  surface: '#16181C',              // Obsidian Charcoal
-  surfaceHover: '#1E2127',         // Slightly lighter for hover
+  background: '#0D0D0F',           // Deep Charcoal
+  backgroundAlt: '#18191D',        // Workshop Dark
+  surface: '#18191D',              // Workshop Dark
+  surfaceHover: '#222328',         // Slightly lighter for hover
   
   // Text
-  text: '#F5F7FA',                 // Signal White
-  textSecondary: '#9CA3AF',        // Muted gray
-  textMuted: '#6B7280',            // Even more muted
+  text: '#F0F0F0',                 // Clean White
+  textSecondary: '#A0A0A5',        // Muted gray
+  textMuted: '#6B6B72',            // Even more muted
   
   // Borders
-  border: '#2A2E35',               // Steel Gray
-  borderSubtle: '#1E2127',         // Subtle border
+  border: '#2C2D33',               // Steel Border
+  borderSubtle: '#222328',         // Subtle border
   borderRadius: '8px',
   
-  // Accents - Electric Violet (use sparingly)
-  accent: '#7B5CFF',               // Electric Violet
-  accentHover: '#8F73FF',          // Lighter violet
-  accentMuted: 'rgba(123, 92, 255, 0.15)',
-  accentGlow: 'rgba(123, 92, 255, 0.4)',
-  accentGold: '#8F73FF',           // Legacy support - maps to lighter violet
+  // Accents - Industrial Orange
+  accent: '#E85D2A',               // Maker Orange
+  accentHover: '#D14E1F',          // Deeper orange
+  accentMuted: 'rgba(232, 93, 42, 0.15)',
+  accentGlow: 'rgba(232, 93, 42, 0.4)',
+  accentGold: '#D4A340',           // Workshop Gold
   
   // Status
-  live: '#E14B4B',                 // Infra Red (live/finals only)
-  liveGlow: 'rgba(225, 75, 75, 0.3)',
+  live: '#E85D2A',                 // Maker Orange
+  liveGlow: 'rgba(232, 93, 42, 0.3)',
   success: '#22C55E',
   warning: '#F59E0B',
   danger: '#EF4444',
@@ -81,38 +81,38 @@ export const darkTheme: DefaultTheme = {
   // Effects
   shadow: 'rgba(0, 0, 0, 0.5)',
   shadowStrong: 'rgba(0, 0, 0, 0.8)',
-  overlay: 'rgba(11, 11, 13, 0.9)',
-  glow: '0 0 20px rgba(123, 92, 255, 0.3)',
+  overlay: 'rgba(13, 13, 15, 0.9)',
+  glow: '0 0 20px rgba(232, 93, 42, 0.3)',
   
-  // Named Colors (Into the Void palette)
-  signalWhite: '#F5F7FA',
-  steelGray: '#2A2E35',
-  infraRed: '#E14B4B',
+  // Named Colors (Detroit Maker palette)
+  signalWhite: '#F0F0F0',
+  steelGray: '#2C2D33',
+  infraRed: '#E85D2A',
 };
 
 // Light theme (kept for compatibility, but app should default to dark)
 export const lightTheme: DefaultTheme = {
-  background: '#F5F7FA',
-  backgroundAlt: '#E5E7EB',
+  background: '#F5F5F0',
+  backgroundAlt: '#E8E8E2',
   surface: '#FFFFFF',
-  surfaceHover: '#F9FAFB',
+  surfaceHover: '#F9F9F5',
   
-  text: '#0B0B0D',
-  textSecondary: '#4B5563',
-  textMuted: '#9CA3AF',
+  text: '#1A1A1E',
+  textSecondary: '#4B4B55',
+  textMuted: '#8A8A8F',
   
-  border: '#D1D5DB',
-  borderSubtle: '#E5E7EB',
+  border: '#D1D1CC',
+  borderSubtle: '#E8E8E2',
   borderRadius: '8px',
   
-  accent: '#7B5CFF',
-  accentHover: '#6B4CE6',
-  accentMuted: 'rgba(123, 92, 255, 0.1)',
-  accentGlow: 'rgba(123, 92, 255, 0.2)',
-  accentGold: '#6B4CE6',
+  accent: '#E85D2A',
+  accentHover: '#D14E1F',
+  accentMuted: 'rgba(232, 93, 42, 0.1)',
+  accentGlow: 'rgba(232, 93, 42, 0.2)',
+  accentGold: '#D4A340',
   
-  live: '#E14B4B',
-  liveGlow: 'rgba(225, 75, 75, 0.2)',
+  live: '#E85D2A',
+  liveGlow: 'rgba(232, 93, 42, 0.2)',
   success: '#22C55E',
   warning: '#F59E0B',
   danger: '#EF4444',
@@ -120,10 +120,10 @@ export const lightTheme: DefaultTheme = {
   shadow: 'rgba(0, 0, 0, 0.1)',
   shadowStrong: 'rgba(0, 0, 0, 0.2)',
   overlay: 'rgba(255, 255, 255, 0.9)',
-  glow: '0 0 20px rgba(123, 92, 255, 0.15)',
+  glow: '0 0 20px rgba(232, 93, 42, 0.15)',
   
   // Named Colors
-  signalWhite: '#F5F7FA',
-  steelGray: '#D1D5DB',
-  infraRed: '#E14B4B',
+  signalWhite: '#F0F0F0',
+  steelGray: '#D1D1CC',
+  infraRed: '#E85D2A',
 };

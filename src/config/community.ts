@@ -17,9 +17,9 @@ export const DEFAULT_TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || 'default';
  */
 export const defaultCommunityConfig = {
   // Basic Info
-  name: process.env.NEXT_PUBLIC_COMMUNITY_NAME || "Community",
-  tagline: process.env.NEXT_PUBLIC_COMMUNITY_TAGLINE || "Connect, Share, Grow",
-  description: "A community for people who share common interests and goals.",
+  name: process.env.NEXT_PUBLIC_COMMUNITY_NAME || "Detroit Maker Hub",
+  tagline: process.env.NEXT_PUBLIC_COMMUNITY_TAGLINE || "Build. Share. Make.",
+  description: "A shared digital hub connecting makers, builders, and makerspaces across Detroit. Discover spaces, find events, and collaborate.",
   
   // Branding
   branding: {
@@ -29,22 +29,23 @@ export const defaultCommunityConfig = {
   
   // Home page copy
   home: {
-    missionStatement: "A place to connect, share, and grow together.",
-    whoIsThisFor: "Anyone who wants to participate and contribute.",
+    missionStatement: "Connecting Detroit's makers, builders, and makerspaces into one shared ecosystem. Discover tools, attend workshops, find collaborators, and grow your craft.",
+    whoIsThisFor: "Artists, fabricators, engineers, tinkerers, students, space organizers, and anyone who builds things.",
     whoIsThisNotFor: null as string | null,
     howToParticipate: [
+      "Explore spaces and tools",
       "Attend events",
-      "Join the chat",
+      "Post or join opportunities",
+      "Join chat",
       "Introduce yourself",
-      "Contribute to the feed",
     ],
     howToContributeLead: [
-      "Volunteer",
-      "Organize events",
-      "Mentor others",
-      "Help shape the community",
+      "Organize workshops and events",
+      "Claim and manage a makerspace profile",
+      "Share gigs, grants, and tool access",
+      "Mentor new makers",
     ],
-    memberValue: "Members get access to events, direct connection with others, and a say in how the community grows.",
+    memberValue: "Members get access to a network of makerspaces, upcoming events, collaboration opportunities, and direct connection with Detroit's maker community.",
     faqUrl: null as string | null,
     guidelinesUrl: null as string | null,
   },
@@ -55,6 +56,8 @@ export const defaultCommunityConfig = {
     chat: true,
     events: true,
     socialFeed: true,
+    spaces: true,
+    opportunities: true,
     showLikes: false,
     showComments: true,
     memberDirectoryPublic: true,
@@ -62,7 +65,7 @@ export const defaultCommunityConfig = {
     attendeeVisibility: 'public' as 'public' | 'members' | 'attendees_only',
     externalEventsApi: null as string | null,
     autoEventRecap: false,
-    chatChannels: 'single' as 'single' | 'event_based' | 'topic_based',
+    chatChannels: 'topic_based' as 'single' | 'event_based' | 'topic_based',
     allowPublicViewing: true,
     requireMembershipToPost: false,
     requireMembershipToChat: false,
@@ -71,13 +74,13 @@ export const defaultCommunityConfig = {
   
   // Theme customization
   theme: {
-    primary: "#7B5CFF",
-    primaryHover: "#8F73FF",
-    accent: "#7B5CFF",
-    background: "#0a0a0a",
-    surface: "#1a1a1a",
-    text: "#ffffff",
-    textMuted: "#888888",
+    primary: "#E85D2A",
+    primaryHover: "#D14E1F",
+    accent: "#E85D2A",
+    background: "#0D0D0F",
+    surface: "#18191D",
+    text: "#F0F0F0",
+    textMuted: "#8A8A8F",
   },
   
   // Social links
