@@ -517,10 +517,17 @@ export default function LoginPage() {
     return () => clearInterval(interval);
   }, [sessionExpiresAt, sessionToken]);
 
-  const getQRCodeUrl = () => {
+  const getQRCodeData = () => {
     if (!sessionToken) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/api/auth/qr-authenticate?token=${sessionToken}`;
+    // Generate JSON data that the mobile app can recognize
+    return JSON.stringify({
+      type: "renaissance_app_auth",
+      token: sessionToken,
+      callbackUrl: `${baseUrl}/api/auth/qr-authenticate`,
+      appName: "Maker Hub",
+      expiresAt: sessionExpiresAt,
+    });
   };
 
   const formatTime = (seconds: number) => {
@@ -981,7 +988,7 @@ export default function LoginPage() {
               <div style={{ textAlign: 'center' }}>
                 <QRCodeContainer>
                   <QRCodeSVG
-                    value={getQRCodeUrl()}
+                    value={getQRCodeData()}
                     size={200}
                     level="M"
                     includeMargin={false}
@@ -1023,7 +1030,7 @@ export default function LoginPage() {
                 </StatusText>
                 <QRCodeContainer>
                   <QRCodeSVG
-                    value={getQRCodeUrl()}
+                    value={getQRCodeData()}
                     size={160}
                     level="M"
                     includeMargin={false}

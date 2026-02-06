@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { db } from './drizzle';
-import { users, members, messages, events, eventRsvps, posts, postLikes, postComments } from './schema';
+import { users, members, messages, events, eventRsvps, posts, postLikes, postComments, spaces, opportunities, type OpportunityType } from './schema';
 
 // Mock profile pictures (placeholder URLs)
 const AVATARS = [
@@ -161,6 +161,230 @@ const MOCK_COMMENTS = [
   "Thanks for putting this together!",
 ];
 
+// Featured Spaces - Detroit Makerspaces
+const MOCK_SPACES = [
+  {
+    name: 'TechShop Detroit',
+    slug: 'techshop-detroit',
+    description: `A community workshop and prototyping studio with industrial tools and equipment. Open to makers of all skill levels with classes, workshops, and open shop hours.
+
+Our 15,000 sq ft facility includes full wood shop, metal shop, laser cutters, 3D printers, and electronics lab. Membership includes 24/7 access and tool training.`,
+    shortDescription: 'Community workshop with industrial tools and prototyping equipment.',
+    neighborhood: 'Midtown',
+    address: '4100 Woodward Ave, Detroit, MI 48201',
+    websiteUrl: 'https://techshop-detroit.example.com',
+    contactEmail: 'info@techshop-detroit.example.com',
+    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800',
+    tools: ['metal', 'wood', 'laser', '3d_print', 'electronics', 'cnc'],
+    isBeginnerFriendly: true,
+    requiresMembership: true,
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    name: 'OmniCorp Labs',
+    slug: 'omnicorp-labs',
+    description: `A member-driven hackerspace and community lab focused on electronics, programming, and digital fabrication. Regular meetups, workshops, and open hack nights every Tuesday and Thursday.
+
+Features electronics workbench, 3D printing farm, 80W laser cutter, and cozy lounge. No membership required for open nights!`,
+    shortDescription: 'Hackerspace focused on electronics and digital fabrication.',
+    neighborhood: 'Ferndale',
+    address: '123 W Nine Mile Rd, Ferndale, MI 48220',
+    websiteUrl: 'https://omnicorp-labs.example.com',
+    contactEmail: 'hello@omnicorp-labs.example.com',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800',
+    tools: ['electronics', '3d_print', 'laser'],
+    isBeginnerFriendly: true,
+    requiresMembership: false,
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    name: 'Incite Focus Factory',
+    slug: 'incite-focus-factory',
+    description: `A creative community space in Eastern Market offering ceramics, textiles, woodworking, and printmaking. Focused on connecting artists and makers through shared studio time.
+
+12 pottery wheels, 2 kilns, screen printing, letterpress, and industrial sewing machines. Open studio hours Tue-Sun.`,
+    shortDescription: 'Creative studio for ceramics, textiles, and printmaking.',
+    neighborhood: 'Eastern Market',
+    address: '2940 Rivard St, Detroit, MI 48207',
+    websiteUrl: 'https://incitefocus.example.com',
+    contactEmail: 'studio@incitefocus.example.com',
+    imageUrl: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800',
+    tools: ['ceramics', 'textiles', 'sewing', 'wood'],
+    isBeginnerFriendly: true,
+    requiresMembership: false,
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    name: 'Ponyride',
+    slug: 'ponyride',
+    description: `Affordable workspace for makers, entrepreneurs, and small businesses in historic Corktown. Renovated warehouse with shared and private studios plus well-equipped wood and metal shops.
+
+8,000 sq ft wood shop, metal fabrication, 4x8 CNC router, spray booth, and loading dock access.`,
+    shortDescription: 'Affordable maker workspace in Corktown.',
+    neighborhood: 'Corktown',
+    address: '1401 Vermont St, Detroit, MI 48216',
+    websiteUrl: 'https://ponyride.org',
+    contactEmail: 'studios@ponyride.org',
+    imageUrl: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800',
+    tools: ['wood', 'metal', 'cnc'],
+    isBeginnerFriendly: false,
+    requiresMembership: true,
+    isVerified: true,
+    isFeatured: true,
+  },
+  {
+    name: 'Detroit Community Technology Project',
+    slug: 'dctp',
+    description: `Teaching community members to build and maintain their own technology infrastructure. Programs focus on digital literacy, mesh networking, and community tech solutions.
+
+Digital Stewards training, community WiFi installations, computer repair workshops. All programs free for Detroit residents.`,
+    shortDescription: 'Community technology education and digital infrastructure.',
+    neighborhood: 'North End',
+    address: '3914 Woodward Ave, Detroit, MI 48201',
+    websiteUrl: 'https://detroitcommunitytech.org',
+    contactEmail: 'info@detroitcommunitytech.org',
+    imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800',
+    tools: ['electronics', 'other'],
+    isBeginnerFriendly: true,
+    requiresMembership: false,
+    isVerified: true,
+    isFeatured: false,
+  },
+  {
+    name: 'Maker Works Detroit',
+    slug: 'maker-works-detroit',
+    description: `A full-service makerspace with everything from woodworking to metalworking, digital fabrication to textiles. Mission: provide access to tools and knowledge for all skill levels.
+
+ShopBot CNC, Tormach metal mill, Epilog laser, industrial 3D printer, automotive lift bay, sewing and embroidery.`,
+    shortDescription: 'Full-service makerspace for all skill levels.',
+    neighborhood: 'Southwest Detroit',
+    address: '5905 Michigan Ave, Detroit, MI 48210',
+    websiteUrl: 'https://makerworks-detroit.example.com',
+    contactEmail: 'make@makerworks-detroit.example.com',
+    imageUrl: 'https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=800',
+    tools: ['wood', 'metal', 'laser', '3d_print', 'cnc', 'textiles', 'sewing'],
+    isBeginnerFriendly: true,
+    requiresMembership: true,
+    isVerified: true,
+    isFeatured: true,
+  },
+];
+
+// Mock Opportunities
+const MOCK_OPPORTUNITIES: Array<{
+  title: string;
+  description: string;
+  type: OpportunityType;
+  contactInfo?: string;
+  spaceSlug?: string; // Will be resolved to spaceId
+  expiresInDays?: number;
+}> = [
+  {
+    title: 'CNC Operator Needed for Furniture Project',
+    description: `Looking for an experienced CNC operator to help with a custom furniture commission. 3-axis router experience preferred (ShopBot or similar).
+
+Project: 12 piece dining set with compound curves in walnut and maple.
+Timeline: 2-3 weeks | Pay: $35-45/hr depending on experience.
+Must be comfortable with Fusion 360 or VCarve.`,
+    type: 'paid_gig',
+    spaceSlug: 'ponyride',
+    contactInfo: 'Email: cnc.projects@example.com',
+    expiresInDays: 30,
+  },
+  {
+    title: 'Collaborator for Interactive Art Installation',
+    description: `Building an interactive LED installation for a gallery show in Eastern Market. Need someone with Arduino/electronics experience.
+
+500+ individually addressable LEDs, motion sensors, custom PCB design. This is a portfolio/credit project - materials covered, co-creator credit.`,
+    type: 'collaborator',
+    spaceSlug: 'incite-focus-factory',
+    expiresInDays: 45,
+  },
+  {
+    title: 'Free Scrap Metal Available',
+    description: `Clearing out the shop! Large quantity of steel and aluminum scrap available.
+
+~200 lbs mild steel (various gauges), ~50 lbs aluminum bar and sheet, some stainless and copper. First come, first served - must take at least 50 lbs.`,
+    type: 'materials_swap',
+    spaceSlug: 'ponyride',
+    expiresInDays: 7,
+  },
+  {
+    title: 'Knight Foundation Arts Grant - Applications Open',
+    description: `Knight Foundation accepting applications for community arts projects in Detroit. Great for makers working at art/technology intersection.
+
+Grants: $5,000 to $25,000 | Must benefit Detroit community | Preference for innovative approaches.
+Deadline: March 15, 2026.`,
+    type: 'grant',
+    contactInfo: 'https://knightfoundation.org/grants',
+    expiresInDays: 60,
+  },
+  {
+    title: 'Laser Cutter Time Available - Weekends',
+    description: `80W CO2 laser available for outside projects on weekends. Great for prototyping or small batch production.
+
+$25/hr (you supply materials) | $35/hr (materials included) | Free if you help with a shop project!
+Bed size: 24x36". Cuts up to 1/2" acrylic, 1/4" plywood.`,
+    type: 'tool_access',
+    spaceSlug: 'omnicorp-labs',
+    contactInfo: 'DM on Slack or email laser@omnicorp-labs.example.com',
+  },
+  {
+    title: 'Open Studio Saturday - Ceramics',
+    description: `Join us for open studio ceramics every Saturday 10am-4pm!
+
+Wheel and hand-building stations, glazing area, kiln firings (cone 6 and 10). Bring your own clay or purchase from us ($15/25lb bag). Day pass: $20 for non-members.`,
+    type: 'open_studio',
+    spaceSlug: 'incite-focus-factory',
+  },
+  {
+    title: 'Welding Instructor Wanted - Part Time',
+    description: `TechShop Detroit looking for part-time welding instructor to teach MIG and TIG basics.
+
+Requirements: 3+ years experience, ability to teach beginners, evenings/weekends. AWS certification preferred.
+Pay: $30-40/hr | Classes are 3 hours, 2-3 per week.`,
+    type: 'paid_gig',
+    spaceSlug: 'techshop-detroit',
+    contactInfo: 'Apply at jobs@techshop-detroit.example.com',
+    expiresInDays: 21,
+  },
+  {
+    title: 'Free 3D Printer Filament - Moving Sale',
+    description: `Moving out of state! Free to good homes:
+
+• 8 rolls PLA (various colors, some partial)
+• 3 rolls PETG (black, white, clear)
+• 2 rolls TPU flexible
+• Misc supports, adhesives, nozzles
+
+All 1.75mm. Pick up in Ferndale by end of month.`,
+    type: 'materials_swap',
+    spaceSlug: 'omnicorp-labs',
+    expiresInDays: 14,
+  },
+  {
+    title: 'Metal Fabricator for Public Art Project',
+    description: `Commission: 12-foot kinetic sculpture for downtown plaza. Need experienced metal fabricator.
+
+Structural steel frame, kinetic elements with bearings, weather-resistant finish.
+Budget: $8,000 for labor (materials separate) | Timeline: 8 weeks.`,
+    type: 'paid_gig',
+    contactInfo: 'Portfolio required: sculpture@example.com',
+    expiresInDays: 30,
+  },
+  {
+    title: 'Wood Shop Orientation - Free for New Makers',
+    description: `Maker Works offering free wood shop orientations every Wednesday at 6pm.
+
+Covers: Shop safety, table saw/bandsaw/jointer basics, dust collection, project storage. Required before using shop independently.`,
+    type: 'open_studio',
+    spaceSlug: 'maker-works-detroit',
+  },
+];
+
 // Helper function to get a date relative to today
 function getRelativeDate(daysFromNow: number): Date {
   const date = new Date();
@@ -227,6 +451,67 @@ async function seed() {
       }).onConflictDoNothing();
       
       console.log(`  ✓ ${user.displayName} joined as member`);
+    }
+
+    // Create spaces
+    console.log('\n🏭 Creating spaces...');
+    const createdSpaces: { id: string; slug: string; name: string }[] = [];
+    
+    for (const spaceData of MOCK_SPACES) {
+      const spaceId = uuidv4();
+      const organizerId = createdUsers[Math.floor(Math.random() * 3)].id; // First 3 users are admins/organizers
+      
+      await db.insert(spaces).values({
+        id: spaceId,
+        name: spaceData.name,
+        slug: spaceData.slug,
+        description: spaceData.description,
+        shortDescription: spaceData.shortDescription,
+        neighborhood: spaceData.neighborhood,
+        address: spaceData.address,
+        websiteUrl: spaceData.websiteUrl,
+        contactEmail: spaceData.contactEmail,
+        imageUrl: spaceData.imageUrl,
+        tools: JSON.stringify(spaceData.tools),
+        isBeginnerFriendly: spaceData.isBeginnerFriendly,
+        requiresMembership: spaceData.requiresMembership,
+        organizerId,
+        isVerified: spaceData.isVerified,
+        isFeatured: spaceData.isFeatured,
+        createdAt: getPastDate(60),
+        updatedAt: getPastDate(7),
+      }).onConflictDoNothing();
+      
+      createdSpaces.push({ id: spaceId, slug: spaceData.slug, name: spaceData.name });
+      console.log(`  ✓ ${spaceData.name} (${spaceData.neighborhood})${spaceData.isFeatured ? ' ⭐' : ''}`);
+    }
+
+    // Create opportunities
+    console.log('\n💼 Creating opportunities...');
+    let opportunityCount = 0;
+    
+    for (const oppData of MOCK_OPPORTUNITIES) {
+      const spaceId = oppData.spaceSlug 
+        ? createdSpaces.find(s => s.slug === oppData.spaceSlug)?.id 
+        : undefined;
+      const posterId = createdUsers[Math.floor(Math.random() * createdUsers.length)].id;
+      
+      await db.insert(opportunities).values({
+        id: uuidv4(),
+        title: oppData.title,
+        description: oppData.description,
+        type: oppData.type,
+        status: 'active',
+        spaceId: spaceId || null,
+        postedById: posterId,
+        contactInfo: oppData.contactInfo || null,
+        expiresAt: oppData.expiresInDays ? getRelativeDate(oppData.expiresInDays) : null,
+        createdAt: getPastDate(Math.floor(Math.random() * 14)),
+        updatedAt: new Date(),
+      }).onConflictDoNothing();
+      
+      opportunityCount++;
+      console.log(`  ✓ [${oppData.type}] ${oppData.title}`);
     }
 
     // Create messages
@@ -370,6 +655,8 @@ async function seed() {
     console.log('Summary:');
     console.log(`  • ${createdUsers.length} users created`);
     console.log(`  • ${createdUsers.length} members created`);
+    console.log(`  • ${createdSpaces.length} spaces created (${createdSpaces.filter((_, i) => MOCK_SPACES[i].isFeatured).length} featured)`);
+    console.log(`  • ${opportunityCount} opportunities created`);
     console.log(`  • ${MOCK_MESSAGES.length} messages created`);
     console.log(`  • ${createdEvents.length} events created`);
     console.log(`  • ${createdPosts.length} posts created`);
@@ -383,7 +670,7 @@ async function seed() {
 
 // Run seed
 seed().then(() => {
-  console.log('\n🎉 Done! Your community is now populated with mock data.\n');
+  console.log('\n🎉 Done! Your Maker Hub is now populated with mock data.\n');
   process.exit(0);
 }).catch((error) => {
   console.error('Fatal error:', error);
