@@ -44,10 +44,10 @@ const formatPhoneNumber = (value: string): string => {
 
 const pulseGlow = keyframes`
   0%, 100% {
-    box-shadow: 0 0 20px rgba(123, 92, 255, 0.3);
+    box-shadow: 0 0 20px rgba(232, 93, 42, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(123, 92, 255, 0.5);
+    box-shadow: 0 0 40px rgba(232, 93, 42, 0.5);
   }
 `;
 
@@ -69,8 +69,8 @@ const Container = styled.div`
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 20% 80%, rgba(123, 92, 255, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 80% 20%, rgba(123, 92, 255, 0.03) 0%, transparent 40%);
+      radial-gradient(circle at 20% 80%, rgba(232, 93, 42, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(232, 93, 42, 0.03) 0%, transparent 40%);
     pointer-events: none;
   }
 `;
@@ -212,23 +212,20 @@ export default function RegisterPage() {
   const [confirmPin, setConfirmPin] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Track if phone was pre-filled from query param
+  const [phonePreFilled, setPhonePreFilled] = useState(false);
 
   // Get the redirect URL or default to home
   const redirectUrl = typeof redirect === 'string' ? redirect : '/';
 
   // Pre-fill phone from query parameter and format it
   useEffect(() => {
-    if (typeof phoneParam === 'string') {
+    if (typeof phoneParam === 'string' && phoneParam) {
       setPhone(formatPhoneNumber(phoneParam));
+      setPhonePreFilled(true);
     }
   }, [phoneParam]);
-
-  // If no phone in query, redirect to login page
-  useEffect(() => {
-    if (router.isReady && !phoneParam) {
-      router.replace(redirect ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login');
-    }
-  }, [router.isReady, phoneParam, redirect, redirectUrl, router]);
 
   // Validate username: only letters, numbers, and underscores
   const isValidUsername = (value: string) => /^[A-Za-z0-9_]+$/.test(value);
@@ -242,6 +239,11 @@ export default function RegisterPage() {
     // Filter out invalid characters (only allow letters, numbers, underscores)
     const filtered = value.replace(/[^A-Za-z0-9_]/g, '');
     setUsername(filtered);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setPhone(formatted);
   };
 
   const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -284,6 +286,11 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!phone || phone.length < 10) {
+      setError('Please enter a valid phone number');
+      return;
+    }
+
     if (!isValidPin(pin)) {
       setError('PIN must be exactly 4 digits');
       return;
@@ -296,12 +303,15 @@ export default function RegisterPage() {
 
     setLoading(true);
 
+    // Normalize phone before sending
+    const normalizedPhone = phone.replace(/[\s\-\(\)]/g, '');
+
     try {
       const pendingUserData = getPendingUserData();
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, name, phone, pin, pendingUserData }),
+        body: JSON.stringify({ username, name, phone: normalizedPhone, pin, pendingUserData }),
         credentials: 'include',
       });
 
@@ -328,27 +338,20 @@ export default function RegisterPage() {
     }
   };
 
-  // Don't render form until we have the phone parameter
-  if (!phoneParam) {
-    return (
-      <Container>
-        <FormCard>
-          <Title>Redirecting...</Title>
-        </FormCard>
-      </Container>
-    );
-  }
-
   return (
     <>
       <Head>
-        <title>Complete Sign Up</title>
-        <meta name="description" content="Complete your account registration" />
+        <title>Create Account</title>
+        <meta name="description" content="Create your account" />
       </Head>
       <Container>
         <FormCard>
-          <Title>Almost There!</Title>
-          <Subtitle>Just a few more details to complete your account</Subtitle>
+          <Title>Create Account</Title>
+          <Subtitle>
+            {phonePreFilled 
+              ? 'Just a few more details to complete your account'
+              : 'Enter your details to get started'}
+          </Subtitle>
           
           <Form onSubmit={handleSubmit}>
             {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -358,8 +361,12 @@ export default function RegisterPage() {
               <Input
                 type="tel"
                 value={phone}
-                readOnly
-                $readOnly
+                onChange={handlePhoneChange}
+                placeholder="+1 (555) 123-4567"
+                required
+                readOnly={phonePreFilled}
+                $readOnly={phonePreFilled}
+                autoComplete="tel"
               />
             </FormGroup>
             
@@ -372,7 +379,7 @@ export default function RegisterPage() {
                 placeholder="your_username"
                 required
                 autoComplete="username"
-                autoFocus
+                autoFocus={phonePreFilled}
               />
             </FormGroup>
             
@@ -423,7 +430,7 @@ export default function RegisterPage() {
           
           <LinksContainer>
             <StyledLink href={redirect ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login'}>
-              Use a different phone number
+              Already have an account? Sign in
             </StyledLink>
           </LinksContainer>
         </FormCard>
